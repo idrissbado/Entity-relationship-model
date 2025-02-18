@@ -173,6 +173,8 @@ CREATE TABLE Coach (
     Specialty VARCHAR(100) NOT NULL -- Coach Specialty
 );
 
+
+
 -- Table: SessionCoach (Many-to-Many Relationship between Session and Coach)
 CREATE TABLE SessionCoach (
     SessionID INT,                  -- Foreign Key referencing Session
