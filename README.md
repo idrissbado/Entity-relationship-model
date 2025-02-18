@@ -80,90 +80,57 @@ Below is the **Entity Relationship Model (ERD)** for the gym management system:
 
 ---
 
-### ERD Diagram
+### ERD Diagram (Using Mermaid)
 
-Below is a textual representation of the **Entity Relationship Diagram (ERD)**:
-+----------------+          +----------------+          +----------------+
-|   Gymnasium    |          |    Member      |          |    Session     |
-+----------------+          +----------------+          +----------------+
-| GymID (PK)     |<-------->| MemberID (PK)  |          | SessionID (PK) |
-| Name           |          | LastName       |<-------->| SportType      |
-| Address        |          | FirstName      |          | Schedule       |
-| PhoneNumber    |          | Address        |          | MaxCapacity    |
-+----------------+          | DateOfBirth    |          | GymID (FK)     |
-                            | Gender         |          +----------------+
-                            | GymID (FK)     |
-                            +----------------+
+Below is the **Entity Relationship Diagram (ERD)** represented using Mermaid syntax:
 
-+----------------+          +----------------+          +----------------+
-|    Coach       |          | SessionCoach   |          | MemberSession  |
-+----------------+          +----------------+          +----------------+
-| CoachID (PK)   |<-------->| SessionID (FK) |          | MemberID (FK)  |
-| LastName       |          | CoachID (FK)   |<-------->| SessionID (FK) |
-| FirstName      |          +----------------+          +----------------+
-| Age            |
-| Specialty      |
-+----------------+
+```mermaid
+erDiagram
+    GYMNASIUM ||--o{ MEMBER : "has"
+    GYMNASIUM ||--o{ SESSION : "hosts"
+    SESSION ||--o{ MEMBER : "accommodates"
+    SESSION ||--o{ COACH : "led by"
+    COACH ||--o{ SESSION : "leads"
 
+    GYMNASIUM {
+        int GymID PK
+        string Name
+        string Address
+        string PhoneNumber
+    }
 
----
+    MEMBER {
+        int MemberID PK
+        string LastName
+        string FirstName
+        string Address
+        date DateOfBirth
+        char Gender
+        int GymID FK
+    }
 
-## Database Schema
+    SESSION {
+        int SessionID PK
+        string SportType
+        datetime Schedule
+        int MaxCapacity
+        int GymID FK
+    }
 
-### Tables
+    COACH {
+        int CoachID PK
+        string LastName
+        string FirstName
+        int Age
+        string Specialty
+    }
 
-1. **Gymnasium**
-   ```sql
-   CREATE TABLE Gymnasium (
-       GymID INT PRIMARY KEY,
-       Name VARCHAR(100) NOT NULL,
-       Address VARCHAR(255) NOT NULL,
-       PhoneNumber VARCHAR(15) NOT NULL
-   );
-   CREATE TABLE Member (
-    MemberID INT PRIMARY KEY,
-    LastName VARCHAR(50) NOT NULL,
-    FirstName VARCHAR(50) NOT NULL,
-    Address VARCHAR(255) NOT NULL,
-    DateOfBirth DATE NOT NULL,
-    Gender CHAR(1) NOT NULL,
-    GymID INT,
-    FOREIGN KEY (GymID) REFERENCES Gymnasium(GymID)
-);
+    SESSION_COACH {
+        int SessionID FK
+        int CoachID FK
+    }
 
-CREATE TABLE Session (
-    SessionID INT PRIMARY KEY,
-    SportType VARCHAR(50) NOT NULL,
-    Schedule DATETIME NOT NULL,
-    MaxCapacity INT DEFAULT 20,
-    GymID INT,
-    FOREIGN KEY (GymID) REFERENCES Gymnasium(GymID)
-);
-
-CREATE TABLE Coach (
-    CoachID INT PRIMARY KEY,
-    LastName VARCHAR(50) NOT NULL,
-    FirstName VARCHAR(50) NOT NULL,
-    Age INT NOT NULL,
-    Specialty VARCHAR(100) NOT NULL
-);
-
-CREATE TABLE SessionCoach (
-    SessionID INT,
-    CoachID INT,
-    PRIMARY KEY (SessionID, CoachID),
-    FOREIGN KEY (SessionID) REFERENCES Session(SessionID),
-    FOREIGN KEY (CoachID) REFERENCES Coach(CoachID)
-);
-CREATE TABLE MemberSession (
-    MemberID INT,
-    SessionID INT,
-    PRIMARY KEY (MemberID, SessionID),
-    FOREIGN KEY (MemberID) REFERENCES Member(MemberID),
-    FOREIGN KEY (SessionID) REFERENCES Session(SessionID)
-);
-
-### Conclusion
-This Entity Relationship Model (ERD) and database schema provide a robust solution for managing gymnasiums, members, sessions, and coaches. By implementing this system, the gym chain can streamline its operations, reduce errors, and improve member satisfaction.
-
-### Author: Bado Idriss Olivier
+    MEMBER_SESSION {
+        int MemberID FK
+        int SessionID FK
+    }
