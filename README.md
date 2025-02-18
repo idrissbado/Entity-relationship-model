@@ -99,24 +99,6 @@ CREATE TABLE Coach (
 );
 
 
-```sql
--- Table: SessionCoach (Many-to-Many Relationship between Session and Coach)
-CREATE TABLE SessionCoach (
-    SessionID INT,                  -- Foreign Key referencing Session
-    CoachID INT,                    -- Foreign Key referencing Coach
-    PRIMARY KEY (SessionID, CoachID), -- Composite Primary Key
-    FOREIGN KEY (SessionID) REFERENCES Session(SessionID), -- Relationship: Session is led by Coach
-    FOREIGN KEY (CoachID) REFERENCES Coach(CoachID)        -- Relationship: Coach leads Session
-);
-
--- Table: MemberSession (Many-to-Many Relationship between Member and Session)
-CREATE TABLE MemberSession (
-    MemberID INT,                   -- Foreign Key referencing Member
-    SessionID INT,                  -- Foreign Key referencing Session
-    PRIMARY KEY (MemberID, SessionID), -- Composite Primary Key
-    FOREIGN KEY (MemberID) REFERENCES Member(MemberID), -- Relationship: Member attends Session
-    FOREIGN KEY (SessionID) REFERENCES Session(SessionID) -- Relationship: Session accommodates Member
-);
 
 ### Relationships
 
