@@ -59,6 +59,64 @@ Below is the **Entity Relationship Model (ERD)** for the gym management system:
    - SessionID (Foreign Key referencing Session)
 
 ---
+-- Table: Gymnasium
+CREATE TABLE Gymnasium (
+    GymID INT PRIMARY KEY,          -- Primary Key
+    Name VARCHAR(100) NOT NULL,     -- Gym Name
+    Address VARCHAR(255) NOT NULL,  -- Gym Address
+    PhoneNumber VARCHAR(15) NOT NULL -- Gym Phone Number
+);
+
+-- Table: Member
+CREATE TABLE Member (
+    MemberID INT PRIMARY KEY,       -- Primary Key
+    LastName VARCHAR(50) NOT NULL,  -- Member Last Name
+    FirstName VARCHAR(50) NOT NULL, -- Member First Name
+    Address VARCHAR(255) NOT NULL,  -- Member Address
+    DateOfBirth DATE NOT NULL,      -- Member Date of Birth
+    Gender CHAR(1) NOT NULL,        -- Member Gender (M/F/O)
+    GymID INT,                      -- Foreign Key referencing Gymnasium
+    FOREIGN KEY (GymID) REFERENCES Gymnasium(GymID) -- Relationship: Gymnasium has Members
+);
+
+-- Table: Session
+CREATE TABLE Session (
+    SessionID INT PRIMARY KEY,      -- Primary Key
+    SportType VARCHAR(50) NOT NULL, -- Type of Sport
+    Schedule DATETIME NOT NULL,     -- Session Schedule
+    MaxCapacity INT DEFAULT 20,     -- Maximum Capacity (default: 20)
+    GymID INT,                      -- Foreign Key referencing Gymnasium
+    FOREIGN KEY (GymID) REFERENCES Gymnasium(GymID) -- Relationship: Gymnasium hosts Sessions
+);
+
+-- Table: Coach
+CREATE TABLE Coach (
+    CoachID INT PRIMARY KEY,        -- Primary Key
+    LastName VARCHAR(50) NOT NULL,  -- Coach Last Name
+    FirstName VARCHAR(50) NOT NULL, -- Coach First Name
+    Age INT NOT NULL,               -- Coach Age
+    Specialty VARCHAR(100) NOT NULL -- Coach Specialty
+);
+
+
+
+-- Table: SessionCoach (Many-to-Many Relationship between Session and Coach)
+CREATE TABLE SessionCoach (
+    SessionID INT,                  -- Foreign Key referencing Session
+    CoachID INT,                    -- Foreign Key referencing Coach
+    PRIMARY KEY (SessionID, CoachID), -- Composite Primary Key
+    FOREIGN KEY (SessionID) REFERENCES Session(SessionID), -- Relationship: Session is led by Coach
+    FOREIGN KEY (CoachID) REFERENCES Coach(CoachID)        -- Relationship: Coach leads Session
+);
+
+-- Table: MemberSession (Many-to-Many Relationship between Member and Session)
+CREATE TABLE MemberSession (
+    MemberID INT,                   -- Foreign Key referencing Member
+    SessionID INT,                  -- Foreign Key referencing Session
+    PRIMARY KEY (MemberID, SessionID), -- Composite Primary Key
+    FOREIGN KEY (MemberID) REFERENCES Member(MemberID), -- Relationship: Member attends Session
+    FOREIGN KEY (SessionID) REFERENCES Session(SessionID) -- Relationship: Session accommodates Member
+);
 
 ### Relationships
 
@@ -134,61 +192,3 @@ erDiagram
         int MemberID FK
         int SessionID FK
     }
--- Table: Gymnasium
-CREATE TABLE Gymnasium (
-    GymID INT PRIMARY KEY,          -- Primary Key
-    Name VARCHAR(100) NOT NULL,     -- Gym Name
-    Address VARCHAR(255) NOT NULL,  -- Gym Address
-    PhoneNumber VARCHAR(15) NOT NULL -- Gym Phone Number
-);
-
--- Table: Member
-CREATE TABLE Member (
-    MemberID INT PRIMARY KEY,       -- Primary Key
-    LastName VARCHAR(50) NOT NULL,  -- Member Last Name
-    FirstName VARCHAR(50) NOT NULL, -- Member First Name
-    Address VARCHAR(255) NOT NULL,  -- Member Address
-    DateOfBirth DATE NOT NULL,      -- Member Date of Birth
-    Gender CHAR(1) NOT NULL,        -- Member Gender (M/F/O)
-    GymID INT,                      -- Foreign Key referencing Gymnasium
-    FOREIGN KEY (GymID) REFERENCES Gymnasium(GymID) -- Relationship: Gymnasium has Members
-);
-
--- Table: Session
-CREATE TABLE Session (
-    SessionID INT PRIMARY KEY,      -- Primary Key
-    SportType VARCHAR(50) NOT NULL, -- Type of Sport
-    Schedule DATETIME NOT NULL,     -- Session Schedule
-    MaxCapacity INT DEFAULT 20,     -- Maximum Capacity (default: 20)
-    GymID INT,                      -- Foreign Key referencing Gymnasium
-    FOREIGN KEY (GymID) REFERENCES Gymnasium(GymID) -- Relationship: Gymnasium hosts Sessions
-);
-
--- Table: Coach
-CREATE TABLE Coach (
-    CoachID INT PRIMARY KEY,        -- Primary Key
-    LastName VARCHAR(50) NOT NULL,  -- Coach Last Name
-    FirstName VARCHAR(50) NOT NULL, -- Coach First Name
-    Age INT NOT NULL,               -- Coach Age
-    Specialty VARCHAR(100) NOT NULL -- Coach Specialty
-);
-
-
-
--- Table: SessionCoach (Many-to-Many Relationship between Session and Coach)
-CREATE TABLE SessionCoach (
-    SessionID INT,                  -- Foreign Key referencing Session
-    CoachID INT,                    -- Foreign Key referencing Coach
-    PRIMARY KEY (SessionID, CoachID), -- Composite Primary Key
-    FOREIGN KEY (SessionID) REFERENCES Session(SessionID), -- Relationship: Session is led by Coach
-    FOREIGN KEY (CoachID) REFERENCES Coach(CoachID)        -- Relationship: Coach leads Session
-);
-
--- Table: MemberSession (Many-to-Many Relationship between Member and Session)
-CREATE TABLE MemberSession (
-    MemberID INT,                   -- Foreign Key referencing Member
-    SessionID INT,                  -- Foreign Key referencing Session
-    PRIMARY KEY (MemberID, SessionID), -- Composite Primary Key
-    FOREIGN KEY (MemberID) REFERENCES Member(MemberID), -- Relationship: Member attends Session
-    FOREIGN KEY (SessionID) REFERENCES Session(SessionID) -- Relationship: Session accommodates Member
-);
