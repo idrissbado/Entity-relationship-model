@@ -99,7 +99,7 @@ CREATE TABLE Coach (
 );
 
 
-
+```sql
 -- Table: SessionCoach (Many-to-Many Relationship between Session and Coach)
 CREATE TABLE SessionCoach (
     SessionID INT,                  -- Foreign Key referencing Session
