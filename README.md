@@ -58,7 +58,7 @@ Below is the **Entity Relationship Model (ERD)** for the gym management system:
    - MemberID (Foreign Key referencing Member)
    - SessionID (Foreign Key referencing Session)
 
----
+```sql
 -- Table: Gymnasium
 CREATE TABLE Gymnasium (
     GymID INT PRIMARY KEY,          -- Primary Key
@@ -97,7 +97,7 @@ CREATE TABLE Coach (
     Age INT NOT NULL,               -- Coach Age
     Specialty VARCHAR(100) NOT NULL -- Coach Specialty
 );
-
+````
 
 
 ### Relationships
